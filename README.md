@@ -1,7 +1,6 @@
 # KnowledgeGraphAI
 - npm version(`npm --version`): `10.8.0`
-- yar
-    django-admin startapp apin version(`yarn --version`): `1.22.22`
+- yarn version(`yarn --version`): `1.22.22`
 - nodeJS version(`node --version`): `v20.11.1`
 - Python version(`python -V`): `Python 3.9.7`
   - Django version(`pip show django`): `Version: 4.1.3`
@@ -29,4 +28,5 @@
     ```
         django-admin startproject backend
         cd backend
+        django-admin startapp api
     ```
