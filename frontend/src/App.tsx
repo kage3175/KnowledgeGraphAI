@@ -3,6 +3,7 @@ import axios from 'axios';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import Header from './Components/Header';
 import './styles/color.css';
+import AddNewKnowledge from './Pages/Add';
 
 export const NAV_MAIN_PAGE = '/'; // :Public/Public
 export const NAV_NEW_PAGE = '/new';
@@ -33,7 +34,10 @@ const App: React.FC = () => {
               {result !== null && <span>Result: {result}</span>}
             </div>
           }/>
-          <Route path={NAV_NEW_PAGE} element={<div> Add New Knowledge Page</div>} />
+          <Route path={NAV_NEW_PAGE} element={<div> 
+            <span>Add New Knowledge Page</span>
+            <AddNewKnowledge />
+            </div>} />
           <Route path={NAV_SUM_PAGE} element={<div> Summary of Knowledge Page</div>} />
           <Route path="*" element={
             <div>
