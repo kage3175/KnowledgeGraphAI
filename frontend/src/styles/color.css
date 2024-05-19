@@ -1,0 +1,28 @@
+:root {
+    --hp-back: #ffffff;
+    --hp-back-darker: #dae1e8;
+    --hp-white: #ffffff;
+    --hp-black: #030303;
+    --hp-gray: #333333;
+
+    /* Custom Image Slider */
+    --hp-blue: #4e8cff;
+    --hp-blue-hover: #679cfe;
+    --hp-blue-active: #2873ff;
+    --hp-lightblue: #74C0FC;
+    --hp-red: #ff4e4e;
+    --hp-modal-background: rgba(0, 0, 0, 0.3);
+    /* Text Color */
+    --hp-text: #111111;
+    --hp-subtext: #333333;
+    --hp-text-blue: #4e8cff;
+
+    --hp-footer: #474747;
+    --hp-header-left: #ff777783;
+    --hp-header-right: #777cffc5;
+
+    --youtube-mode-one: #61b327;
+    --youtube-mode-two: #8972ff;
+    --bibtex-bg: #ebebeb;
+    --bibtex-fg: #333333;
+}

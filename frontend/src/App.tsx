@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { HashRouter, Route, Routes } from 'react-router-dom';
+import Header from './Components/Header';
+import './styles/color.css';
+
+export const NAV_MAIN_PAGE = '/'; // :Public/Public
+export const NAV_NEW_PAGE = '/new';
+export const NAV_SUM_PAGE = '/summary';
 
 const App: React.FC = () => {
   const [number, setNumber] = useState<number>(0);
@@ -15,11 +22,28 @@ const App: React.FC = () => {
   };
 
   return (
-    <div>
-      <input type="number" value={number} onChange={(e) => setNumber(Number(e.target.value))} />
-      <button onClick={handleIncrement}>Increment</button>
-      {result !== null && <span>Result: {result}</span>}
-    </div>
+    <>
+      <HashRouter>
+        <Header />
+        <Routes>
+          <Route path={NAV_MAIN_PAGE} element={
+            <div>
+              <input type="number" value={number} onChange={(e) => setNumber(Number(e.target.value))} />
+              <button onClick={handleIncrement}>Increment</button>
+              {result !== null && <span>Result: {result}</span>}
+            </div>
+          }/>
+          <Route path={NAV_NEW_PAGE} element={<div> Add New Knowledge Page</div>} />
+          <Route path={NAV_SUM_PAGE} element={<div> Summary of Knowledge Page</div>} />
+          <Route path="*" element={
+            <div>
+              NOT FOUND
+            </div>
+          }/>
+        </Routes>
+        
+      </HashRouter>
+    </>
   );
 }
 
