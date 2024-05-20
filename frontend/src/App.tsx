@@ -34,10 +34,7 @@ const App: React.FC = () => {
               {result !== null && <span>Result: {result}</span>}
             </div>
           }/>
-          <Route path={NAV_NEW_PAGE} element={<div> 
-            <span>Add New Knowledge Page</span>
-            <AddNewKnowledge />
-            </div>} />
+          <Route path={NAV_NEW_PAGE} element={<AddNewKnowledge />} />
           <Route path={NAV_SUM_PAGE} element={<div> Summary of Knowledge Page</div>} />
           <Route path="*" element={
             <div>
