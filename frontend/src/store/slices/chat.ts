@@ -6,11 +6,13 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import * as chatAPI from '../apis/chat';
 
 interface ChatState {
+  chatList: string[];
   chatSummary: string | null;
   chatStatus: boolean | null | undefined; // True: 성공, False: 실패, null: 로딩중, undefined: 아직 안함.
   error: AxiosError | null;
 }
 export const initialState: ChatState = {
+  chatList: [],
   chatSummary: null,
   chatStatus: undefined, 
   error: null,
@@ -20,6 +22,18 @@ export const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
+    getChats: state => {
+        state.chatStatus = null;
+    },
+    getChatsSuccess: (state, { payload }) => {
+        console.log(payload)
+        state.chatList = payload.chats;
+        state.chatStatus = true;
+    },
+    getChatsFailure: (state, { payload }) => {
+        state.chatList = [];
+        state.chatStatus = false;
+    },
     sendNewMessage: (state, action: PayloadAction<chatAPI.sendNewMessagePostReqType>) => {
         state.chatStatus = null;
     },
@@ -44,6 +58,14 @@ export const chatSlice = createSlice({
 });
 export const chatActions = chatSlice.actions;
 
+function* getChatsSaga() {
+    try {
+      const response: AxiosResponse = yield call(chatAPI.getChats);
+      yield put(chatActions.getChatsSuccess(response));
+    } catch (error) {
+      yield put(chatActions.getChatsFailure(error));
+    }
+}
 function* sendNewMessageSaga(action: PayloadAction<chatAPI.sendNewMessagePostReqType>) {
     try {
       const response: AxiosResponse = yield call(chatAPI.sendNewMessage, action.payload);
@@ -62,6 +84,7 @@ function* createNewURLSaga(action: PayloadAction<chatAPI.createNewURLPostReqType
 }
 
 export default function* chatSaga() {
+  yield takeLatest(chatActions.getChats, getChatsSaga);
   yield takeLatest(chatActions.sendNewMessage, sendNewMessageSaga);
   yield takeLatest(chatActions.createNewURL, createNewURLSaga);
 }

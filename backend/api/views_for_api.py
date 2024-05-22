@@ -46,6 +46,16 @@ class ExtractConceptsView(APIView):
             res += chunk.choices[0].delta.content or ""
         return res
 
+    def get(self, request, *args, **kwargs):
+        try:
+            articles = Article.objects.all()
+            # article_names = [{'name': article.name} for article in articles]
+            article_names = [article.name for article in articles]
+            return Response({ 'chats': article_names}, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"An error occurred: {e}")
+            return Response({'error': f"An error occurred: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     def post(self, request, *args, **kwargs):
         url = request.data.get('url')
         message = request.data.get('message')

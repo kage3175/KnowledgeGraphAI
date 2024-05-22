@@ -18,3 +18,8 @@ export const createNewURL = async (payload: createNewURLPostReqType) => {
   const response = await client.post<createNewURLPostReqType>(`/api/chat/`, payload);
   return response.data;
 };
+
+export const getChats = async () => {
+    const response = await client.get(`/api/chat/`);
+    return response.data;
+};
