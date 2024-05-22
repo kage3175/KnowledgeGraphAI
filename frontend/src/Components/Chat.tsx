@@ -20,7 +20,8 @@ export const Chat: React.FC<ChatProps> = ({ messages }) => {
     <ChatContainer>
       {messages.map((msg, index) => (
         <ChatBubble key={index} isUser={index % 2 !== 0}>
-          <strong>{msg[0]}:</strong>
+          <strong>{msg[0]}</strong>
+          <br />
           <ChatSpan dangerouslySetInnerHTML={{ __html: parseMessage(msg[1]) }} />
         </ChatBubble>
       ))}
@@ -28,7 +29,8 @@ export const Chat: React.FC<ChatProps> = ({ messages }) => {
   );
 };
 
-const ChatSpan = styled.span`
+const ChatSpan = styled.div`
+    width: 100%;
     text-align: left;
 `;
 
@@ -67,7 +69,6 @@ const ChatBubble = styled.div<{ isUser: boolean }>`
   animation: ${bubbleAnimation} 0.3s ease-out;
 
   strong {
-    display: block;
     font-weight: bold;
     margin-bottom: 5px;
   }

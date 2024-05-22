@@ -119,6 +119,7 @@ const AddNewKnowledge: React.FC = () => {
 	};
 	const handleAdditionalChats = async () => {
 		try {
+			setChat("");
 			const response = await axios.post('http://127.0.0.1:8000/api/extract-concepts/', { url: input, message: chat });
 			const data = response.data;
 			setArticle(data);
@@ -151,20 +152,8 @@ const AddNewKnowledge: React.FC = () => {
 				<Typography variant="h5" gutterBottom>
 					Add New Knowledge
 				</Typography>
-				<Form>
-					<TextField
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						id="input"
-						label="Enter Keyword or URL"
-						name="input"
-						autoComplete="off"
-						autoFocus
-						value={input}
-						onChange={(e) => setInput(e.target.value)}
-					/>
+				<FormC>
+					<TextField variant="outlined" margin="normal" required fullWidth id="input" label="Enter Keyword or URL" name="input" autoComplete="off" autoFocus value={input} onChange={(e) => setInput(e.target.value)}/>
 					<Button
 						variant="contained"
 						color="primary"
@@ -173,35 +162,19 @@ const AddNewKnowledge: React.FC = () => {
 					>
 						Extract Concepts
 					</Button>
-				</Form>
+				</FormC>
 				<FullDiv>
 					{article && <Chat messages={transformString(article?.summary)} />}
 				</FullDiv>
-				{
-					article && <Form>
-					<TextField
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						id="input"
-						label="Additional Chats about the URL"
-						name="input"
-						autoComplete="off"
-						value={chat}
-						onChange={(e) => setChat(e.target.value)}
-					/>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={handleAdditionalChats}
-						style={{ marginTop: '1rem' }}
-					>
+				{article && <FormR>
+					<TextField variant="outlined" margin="normal" required fullWidth id="input" label="Additional Chats about the URL" name="input" autoComplete="off" value={chat} onChange={(e) => setChat(e.target.value)}/>
+					<Button variant="contained" color="primary" onClick={handleAdditionalChats} style={{ marginTop: '1rem' }}>
 						Send!
 					</Button>
-				</Form>
-				}
-				
+				</FormR>}
+				<Button variant="contained" color="primary" onClick={() => {}} style={{ marginTop: '1rem' }}>
+					Add to Graph!
+				</Button>
 				<GraphContainer>
 					{graphData.nodes.length > 0 && (
 						<>
@@ -238,7 +211,12 @@ const FullDiv = styled.div`
 	width: 100%;
 `;
 // Styled-components
-const Form = styled.form`
+const FormR = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+`;
+const FormC = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;

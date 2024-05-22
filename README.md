@@ -8,6 +8,11 @@
   - Django-cors-headers(`pip show django-cors-headers`): `Version: 3.13.0`
   - `python-dotenv`, `gradio`, `friendli-client`
 
+## Operational Tips
+- Backend DB 관리
+  - `python manage.py createsuperuser`를 실행해서 admin user를 만든 후, 브라우저로 `http://127.0.0.1:8000/admin/`에 접속하여 그 user로 로그인하면 현재 Backend의 DB 구조를 볼 수 있습니다.
+
+## Basic Tips
 ### How can you execute this repository?
 - Frontend
 ```
