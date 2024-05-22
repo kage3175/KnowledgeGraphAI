@@ -56,7 +56,7 @@ const AddNewKnowledge: React.FC = () => {
   };
   const handleListItemClick = (item: string) => {
     setInput(item);
-    handleExtractConcepts();
+    dispatch(chatActions.createNewURL({url: item}));
   };
 
   const onClickNode = (nodeId: string) => {
