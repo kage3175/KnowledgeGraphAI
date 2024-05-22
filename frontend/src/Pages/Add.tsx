@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Graph } from 'react-d3-graph';
 import styled, { keyframes } from 'styled-components';
 import { TextField, Button, Container, CssBaseline, Paper, Typography } from '@mui/material';
+import { Chat, MessageTuple } from '../Components/Chat';
 
 const graphConfig = {
   automaticRearrangeAfterDropNode: true,
@@ -72,31 +73,60 @@ const graphConfig = {
   }
 };
 
+type Article = {
+	summary: string
+};
+
+const transformString = (input: string) : MessageTuple[] => {
+    const parts = input.split('<|THISISCHATSEP|>');
+    const keys = ["AI", "User"];
+    return parts.map((part, index) => [keys[index % keys.length], part]);
+};
+
+
 const AddNewKnowledge: React.FC = () => {
 	const [input, setInput] = useState<string>('');
+	const [chat, setChat] = useState<string>('');
 	const [graphData, setGraphData] = useState<any>({ nodes: [], links: [] });
 	const [zoomLevel, setZoomLevel] = useState<number>(1);
+	const [article, setArticle] = useState<Article | null>(null); // Add this line
 
 	const handleExtractConcepts = async () => {
 		try {
 			const response = await axios.post('http://127.0.0.1:8000/api/extract-concepts/', { url: input });
-			const graph = JSON.parse(response.data.graph);
-
-			const formattedGraphData = {
-				nodes: graph.nodes.map((node: any) => ({
-					id: node.id || 'undefined_node'
-				})),
-				links: graph.links.map((link: any) => ({
-					source: link.source || 'undefined_source',
-					target: link.target || 'undefined_target'
-				}))
-			};
-
-			setGraphData(formattedGraphData);
+			const data = response.data;
+			setArticle(data);
+		
+			// Set the article data
+		
+			// Parse the graph data
+			//   const graph = JSON.parse(data.graph);
+		
+			//   const formattedGraphData = {
+			// 	nodes: graph.nodes.map((node: any) => ({
+			// 	  id: node.id || 'undefined_node'
+			// 	})),
+			// 	links: graph.links.map((link: any) => ({
+			// 	  source: link.source || 'undefined_source',
+			// 	  target: link.target || 'undefined_target'
+			// 	}))
+			//   };
+		
+			//   setGraphData(formattedGraphData);
 		} catch (error) {
-			console.error('There was an error!', error);
+		  console.error('There was an error!', error);
 		}
 	};
+	const handleAdditionalChats = async () => {
+		try {
+			const response = await axios.post('http://127.0.0.1:8000/api/extract-concepts/', { url: input, message: chat });
+			const data = response.data;
+			setArticle(data);
+		} catch (error) {
+		  console.error('There was an error!', error);
+		}
+	};
+	  
 
 	const onClickNode = (nodeId: string) => {
 		console.log(`Clicked node ${nodeId}`);
@@ -144,6 +174,34 @@ const AddNewKnowledge: React.FC = () => {
 						Extract Concepts
 					</Button>
 				</Form>
+				<div>
+					{article && <Chat messages={transformString(article?.summary)} />}
+				</div>
+				{
+					article && <Form>
+					<TextField
+						variant="outlined"
+						margin="normal"
+						required
+						fullWidth
+						id="input"
+						label="Additional Chats about the URL"
+						name="input"
+						autoComplete="off"
+						value={chat}
+						onChange={(e) => setChat(e.target.value)}
+					/>
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={handleAdditionalChats}
+						style={{ marginTop: '1rem' }}
+					>
+						Send!
+					</Button>
+				</Form>
+				}
+				
 				<GraphContainer>
 					{graphData.nodes.length > 0 && (
 						<>

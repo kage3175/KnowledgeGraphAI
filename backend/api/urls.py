@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import IncrementView, ExtractConceptsView
+from .views_for_api import IncrementView, ExtractConceptsView
 
 urlpatterns = [
     path('increment/', IncrementView.as_view(), name='increment'),

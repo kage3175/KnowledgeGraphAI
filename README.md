@@ -6,6 +6,7 @@
   - Django version(`pip show django`): `Version: 4.1.3`
   - Djangorestframework(`pip show djangorestframework`): `Version: 3.14.0`
   - Django-cors-headers(`pip show django-cors-headers`): `Version: 3.13.0`
+  - `python-dotenv`, `gradio`, `friendli-client`
 
 ### How can you execute this repository?
 - Frontend
@@ -14,6 +15,7 @@
     yarn start
 ```
 - Backend
+- 일단, /backend 폴더에 .env 파일을 생성하고, `FRIENDLI_TOKEN = "{당신의 Friendli AI token}"`을 기입해주세요.
 ```
     cd backend
     python manage.py runserver

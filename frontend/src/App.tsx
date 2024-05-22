@@ -35,6 +35,7 @@ const App: React.FC = () => {
             </div>
           }/>
           <Route path={NAV_NEW_PAGE} element={<AddNewKnowledge />} />
+          <Route path={'/graph'} element={<span>그래프 테스트입니다.</span>} />
           <Route path={NAV_SUM_PAGE} element={<div> Summary of Knowledge Page</div>} />
           <Route path="*" element={
             <div>
