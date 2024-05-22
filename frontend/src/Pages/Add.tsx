@@ -174,9 +174,9 @@ const AddNewKnowledge: React.FC = () => {
 						Extract Concepts
 					</Button>
 				</Form>
-				<div>
+				<FullDiv>
 					{article && <Chat messages={transformString(article?.summary)} />}
-				</div>
+				</FullDiv>
 				{
 					article && <Form>
 					<TextField
@@ -234,6 +234,9 @@ const AddNewKnowledge: React.FC = () => {
 
 export default AddNewKnowledge;
 
+const FullDiv = styled.div`
+	width: 100%;
+`;
 // Styled-components
 const Form = styled.form`
 	display: flex;

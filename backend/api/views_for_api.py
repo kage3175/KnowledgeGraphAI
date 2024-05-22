@@ -52,7 +52,7 @@ class ExtractConceptsView(APIView):
         if not url:
             return Response({'error': 'URL is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not message: # First Try
+        if not message: # Frontend에서 처음으로 URL을 입력하고 Extract Concept를 클릭했을 때.
             try:
                 # Check if an Article with the same link already exists
                 if Article.objects.filter(link=url).exists():
@@ -79,7 +79,8 @@ class ExtractConceptsView(APIView):
             except Exception as e:
                 logger.error(f"An error occurred: {e}")
                 return Response({'error': f"An error occurred: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        else: # Additional Chats
+            
+        else: # URL을 이미 클릭한 후, Additional Chats - Send를 클릭했을 때.
             def pairwise(iterable):
                 a = iter(iterable)
                 return list(zip(a, a))  
@@ -91,10 +92,8 @@ class ExtractConceptsView(APIView):
                 # Initialize history as empty if no previous conversation
                 history = pairwise([url, *summary_segments])
 
-                print(history)
-                print("-------------------------------------------------------------------------")
                 # Get the summary from LLM
-                llm_result = self.chat_function(message=url, history=history)
+                llm_result = self.chat_function(message=message, history=history)
 
                 # Create and save the Article object
                 target_article.summary = CHAT_SEP.join([*summary_segments, message, llm_result])
