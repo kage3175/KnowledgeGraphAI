@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Graph } from 'react-d3-graph';
 import styled, { keyframes } from 'styled-components';
-import { TextField, Button, Container, CssBaseline, Paper, Typography } from '@mui/material';
+import { TextField, Button, Container, CssBaseline, Paper, Typography, CircularProgress } from '@mui/material';
 import { Chat, MessageTuple } from '../Components/Chat';
+import { useDispatch } from 'react-redux';
+import { chatActions } from '../store/slices/chat';
+import { useAppSelector } from '../hooks/useAppSelector';
 
 const graphConfig = {
   automaticRearrangeAfterDropNode: true,
@@ -73,62 +75,46 @@ const graphConfig = {
   }
 };
 
-type Article = {
-	summary: string
-};
-
 const transformString = (input: string) : MessageTuple[] => {
     const parts = input.split('<|THISISCHATSEP|>');
     const keys = ["AI", "User"];
     return parts.map((part, index) => [keys[index % keys.length], part]);
 };
 
+// Parse the graph data
+//   const graph = JSON.parse(data.graph);
+
+//   const formattedGraphData = {
+// 	nodes: graph.nodes.map((node: any) => ({
+// 	  id: node.id || 'undefined_node'
+// 	})),
+// 	links: graph.links.map((link: any) => ({
+// 	  source: link.source || 'undefined_source',
+// 	  target: link.target || 'undefined_target'
+// 	}))
+//   };
+
+//   setGraphData(formattedGraphData);
 
 const AddNewKnowledge: React.FC = () => {
+	const dispatch = useDispatch();
+	const articleChats = useAppSelector((state) => state.chat.chatSummary);
+	const articleChatStat = useAppSelector((state) => state.chat.chatStatus);
+
 	const [input, setInput] = useState<string>('');
 	const [chat, setChat] = useState<string>('');
 	const [graphData, setGraphData] = useState<any>({ nodes: [], links: [] });
 	const [zoomLevel, setZoomLevel] = useState<number>(1);
-	const [article, setArticle] = useState<Article | null>(null); // Add this line
+	// const [article, setArticle] = useState<Article | null>(null); // Add this line
 
 	const handleExtractConcepts = async () => {
-		try {
-			const response = await axios.post('http://127.0.0.1:8000/api/extract-concepts/', { url: input });
-			const data = response.data;
-			setArticle(data);
-		
-			// Set the article data
-		
-			// Parse the graph data
-			//   const graph = JSON.parse(data.graph);
-		
-			//   const formattedGraphData = {
-			// 	nodes: graph.nodes.map((node: any) => ({
-			// 	  id: node.id || 'undefined_node'
-			// 	})),
-			// 	links: graph.links.map((link: any) => ({
-			// 	  source: link.source || 'undefined_source',
-			// 	  target: link.target || 'undefined_target'
-			// 	}))
-			//   };
-		
-			//   setGraphData(formattedGraphData);
-		} catch (error) {
-		  console.error('There was an error!', error);
-		}
+		dispatch(chatActions.createNewURL({url: input}));
 	};
 	const handleAdditionalChats = async () => {
-		try {
-			setChat("");
-			const response = await axios.post('http://127.0.0.1:8000/api/extract-concepts/', { url: input, message: chat });
-			const data = response.data;
-			setArticle(data);
-		} catch (error) {
-		  console.error('There was an error!', error);
-		}
+		setChat("");
+		dispatch(chatActions.sendNewMessage({url: input, message: chat}));
 	};
 	  
-
 	const onClickNode = (nodeId: string) => {
 		console.log(`Clicked node ${nodeId}`);
 	};
@@ -154,23 +140,29 @@ const AddNewKnowledge: React.FC = () => {
 				</Typography>
 				<FormC>
 					<TextField variant="outlined" margin="normal" required fullWidth id="input" label="Enter Keyword or URL" name="input" autoComplete="off" autoFocus value={input} onChange={(e) => setInput(e.target.value)}/>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={handleExtractConcepts}
-						style={{ marginTop: '1rem' }}
-					>
-						Extract Concepts
-					</Button>
+					{articleChatStat === null ?
+						<CircularProgress />
+						:
+						<Button variant="contained" color="primary" onClick={handleExtractConcepts} style={{ marginTop: '1rem' }}>
+							Extract Concepts
+						</Button>
+					}
+
+					
 				</FormC>
+
 				<FullDiv>
-					{article && <Chat messages={transformString(article?.summary)} />}
+					{articleChats && <Chat messages={transformString(articleChats)} />}
 				</FullDiv>
-				{article && <FormR>
+				{articleChats && <FormR>
 					<TextField variant="outlined" margin="normal" required fullWidth id="input" label="Additional Chats about the URL" name="input" autoComplete="off" value={chat} onChange={(e) => setChat(e.target.value)}/>
-					<Button variant="contained" color="primary" onClick={handleAdditionalChats} style={{ marginTop: '1rem' }}>
-						Send!
-					</Button>
+					{articleChatStat === null ?
+						<CircularProgress />
+						:
+						<Button variant="contained" color="primary" onClick={handleAdditionalChats} style={{ marginTop: '1rem' }}>
+							Send!
+						</Button>
+					}
 				</FormR>}
 				<Button variant="contained" color="primary" onClick={() => {}} style={{ marginTop: '1rem' }}>
 					Add to Graph!

@@ -3,5 +3,5 @@ from .views_for_api import IncrementView, ExtractConceptsView
 
 urlpatterns = [
     path('increment/', IncrementView.as_view(), name='increment'),
-    path('extract-concepts/', ExtractConceptsView.as_view(), name='extract-concepts'),
+    path('chat/', ExtractConceptsView.as_view(), name='chat'),
 ]

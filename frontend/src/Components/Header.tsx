@@ -1,7 +1,8 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { coreActions, selectCore, TabState } from "../store/slices/core";
+import { coreActions, TabState } from "../store/slices/core";
+// import { coreActions, selectCore, TabState } from "../store/slices/core";
 import { NAV_MAIN_PAGE, NAV_NEW_PAGE, NAV_SUM_PAGE } from "../App";
 
 const HeaderBtn = styled.div`
@@ -23,19 +24,19 @@ const HeaderBtn = styled.div`
 `;
 
 const Header = () => {
-    const coreState = useSelector(selectCore);
+    // const coreState = useSelector(selectCore);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const isActiveTab = (tab: TabState) => {
-        if(tab === coreState.selectedTab){
+        // if(tab === coreState.selectedTab){
             return 'var(--hp-blue-active)';
-        }else{
-            return 'var(--hp-gray)';
-        }
+        // }else{
+            // return 'var(--hp-gray)';
+        // }
     }
     const go_to_fn = (action: TabState, link: string) => {
-        dispatch(coreActions.setTab({selectedTab: action}));
+        // dispatch(coreActions.setTab({selectedTab: action}));
         navigate(link);
     };
 

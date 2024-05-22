@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "..";
+// import { RootState } from "..";
 
 export enum TabState {
   MAIN = 0, NEW = 1, SUMMARY = 2,
@@ -48,5 +48,5 @@ export const coreSlice = createSlice(
 );
 
 export const coreActions = coreSlice.actions;
-export const selectCore = (state: RootState) => state.core;
+// export const selectCore = (state: RootState) => state.core;
 export default coreSlice.reducer;
